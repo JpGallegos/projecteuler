@@ -4,6 +4,17 @@ between the problems found in Project Euler.\
 """
 from math import sqrt
 
+class Memoize(object):
+    def __init__(self, func):
+        self.func = func
+        self.memo = {}
+
+    def __call__(self, *args):
+        if not args in self.memo:
+            self.memo[args] = self.func(*args)
+        return self.memo[args]
+
+@Memoize
 def is_prime(number):
     if number > 1:
         if number == 2:
@@ -16,22 +27,31 @@ def is_prime(number):
         return True
     return False
 
-def get_primes(n):
-	"""\
-	Generates all the primes from 2 to sqrt(n).\
-	\
-	Raises ValueError if n < 2.\
-	"""
-	if n < 2:
-		raise ValueError
-	elif n == 2: 
-		yield 2
-	else:
-		prime_range = int(sqrt(n)) + 1
+def get_primes(n=None):
+    """\
+    Generates all the primes from 2 to sqrt(n).\
+    If no paremeter is passed then iterate through all odd integer numbers.\
+    \
+    Raises ValueError if n < 2.\
+    """
+    if n != None and n < 2:
+        raise ValueError
+    elif n == 2: 
+        yield 2
+    elif n != None:
+        prime_range = int(sqrt(n)) + 1
 
-		yield 2
+        yield 2
 
-		# Even numbers > 2 are never prime, don't even bother testing
-		for num in range(3, prime_range, 2):
-			if is_prime(num):
-				yield num
+        # Even numbers > 2 are never prime, don't even bother testing
+        for num in range(3, prime_range, 2):
+            if is_prime(num):
+                yield num 
+    elif n == None:
+        num = 3
+        yield 2
+
+        while 1:
+            if is_prime(num):
+                yield num
+            num += 2
