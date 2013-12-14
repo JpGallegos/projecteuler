@@ -55,3 +55,13 @@ def get_primes(n=None):
             if is_prime(num):
                 yield num
             num += 2
+
+def gcd(a, b):
+    m = max(a, b)
+    n = min(a, b)
+    if m % n == 0:
+        return m
+    return gcd(n, m%n)
+
+def coprime(a, b):
+    return gcd(a, b) == 1
